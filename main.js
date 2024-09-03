@@ -11,6 +11,7 @@ import { initCaptchaServer } from "./Helper/functions.js";
 import { fetchCaptchaWindow, setCaptchaWindow } from "./Helper/captchaWindow.js";
 
 let captchaWindow = null;
+const access = promisify(fs.access);
 const readFile = promisify(fs.readFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -21,9 +22,9 @@ const initCaptchaWindow = async (captchaId) => {
     };
 
     const partitionsPath = is.production()
-        ? join(os.homedir(), 'AppData', 'Roaming', 'lunartoolbox', 'Partitions')
+        ? join(os.homedir(), 'AppData', 'Roaming', 'captchaharvester', 'Partitions')
         : join(os.homedir(), 'AppData', 'Roaming', 'Electron', 'Partitions');
-    const captchaPath = join(os.homedir(), 'Lunar Tools', 'captcha.json');
+    const captchaPath = join(os.homedir(), 'Captcha Harvester', 'captcha.json');
     const data = await readFile(captchaPath, 'utf8');
     const captchaGroups = JSON.parse(data);
     const captchaGroup = captchaGroups.find(g => g.id === captchaId);
@@ -87,7 +88,7 @@ const initCaptchaWindow = async (captchaId) => {
 
         if (req.url === `${checkpointSite}`) {
             const htmlPath = join(__dirname, './Frontend/index.html');
-            const htmlExists = await fs.promises.access(htmlPath, fs.constants.F_OK)
+            const htmlExists = await access(htmlPath, fs.constants.F_OK)
                 .then(() => true)
                 .catch(() => false);
     
@@ -107,7 +108,7 @@ const initCaptchaWindow = async (captchaId) => {
             }
         } else if (req.url === `${checkpointSite}/index.css`) {
             const cssPath = join(__dirname, './Frontend/index.css');
-            const cssExists = await fs.promises.access(cssPath, fs.constants.F_OK)
+            const cssExists = await access(cssPath, fs.constants.F_OK)
                 .then(() => true)
                 .catch(() => false);
     
@@ -130,7 +131,7 @@ const initCaptchaWindow = async (captchaId) => {
 
 app.on('ready', () => {
     initCaptchaServer();
-    initCaptchaWindow("b7a205bc-e462-44a3-8ff9-7f6ceffac05d");
+    initCaptchaWindow(captchaId);
 });
 
 function getCaptchaWindow() {
