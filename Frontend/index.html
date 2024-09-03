@@ -1,0 +1,32 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <title>Lunar Tools</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="harvester-header">
+        <div class="harvester-drag-area"></div>
+        <div class="harvester-window-controls">
+            <div class="harvester-close-btn" onclick="closeWindow()"></div>
+        </div>
+    </div>
+    <form action="/submit" method="POST" class="center-form">
+        <div class="g-recaptcha" id="captchaFrame" data-sitekey="" data-callback="sub"></div>
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        const io = require('socket.io-client');
+        const socket = io.connect('http://localhost:4077');    
+        function sub() {
+            socket.emit('send-captcha', grecaptcha.getResponse());
+            grecaptcha.reset();
+        }
+        function closeWindow() {
+            socket.emit('close-captcha-harvester');
+        }
+    </script>
+</body>
+</html>
