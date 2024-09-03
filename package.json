@@ -1,15 +1,14 @@
 {
-  "name": "lunar-harvester",
+  "name": "captcha-harvester",
   "type": "module",
   "version": "1.0.0",
   "main": "main.js",
-  "description": "Captcha Harvester For Lunar Tools Client",
+  "description": "Captcha Harvester Utilizing Electron",
   "scripts": {
-    "start": "electron .",
-    "bundle": "node esbuild.config.js"
+    "start": "electron ."
   },
   "keywords": [],
-  "author": "Lunar Tools",
+  "author": "senpai0807",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
